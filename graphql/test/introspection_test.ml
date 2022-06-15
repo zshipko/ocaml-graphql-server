@@ -183,8 +183,7 @@ let suite =
                   ~args:
                     Arg.
                       [
-                        arg "x" ~typ:(non_null int);
-                        arg "y" ~typ:(non_null int);
+                        arg "x" ~typ:(non_null int); arg "y" ~typ:(non_null int);
                       ]
                   ~resolve:(fun _ _ x y -> x + y);
               ])
@@ -308,8 +307,7 @@ let suite =
           __typename
         }
       |}
-          (`Assoc
-            [ ("data", `Assoc [ ("__typename", `String "MyMutation") ]) ]);
+          (`Assoc [ ("data", `Assoc [ ("__typename", `String "MyMutation") ]) ]);
         test_query schema
           {|
         subscription {

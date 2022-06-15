@@ -1,39 +1,39 @@
 open Graphql
 
 type cat = { name : string; kittens : int }
-
 type dog = { name : string; puppies : int }
 
 let meow : cat = { name = "Meow"; kittens = 1 }
-
 let fido : dog = { name = "Fido"; puppies = 2 }
 
 let cat =
-  Schema.(fix (fun fixpoint ->
-    fixpoint.obj "Cat" ~fields:(fun _self -> [
-      field "name" ~typ:(non_null string)
-      ~args:Arg.[]
-      ~resolve:(fun _ (cat : cat) -> cat.name);
-        field "kittens" ~typ:(non_null int)
-        ~args:Arg.[]
-        ~resolve:(fun _ (cat : cat) -> cat.kittens);
-        ])))
+  Schema.(
+    fix (fun fixpoint ->
+        fixpoint.obj "Cat" ~fields:(fun _self ->
+            [
+              field "name" ~typ:(non_null string)
+                ~args:Arg.[]
+                ~resolve:(fun _ (cat : cat) -> cat.name);
+              field "kittens" ~typ:(non_null int)
+                ~args:Arg.[]
+                ~resolve:(fun _ (cat : cat) -> cat.kittens);
+            ])))
 
 let dog =
   Schema.(
-    obj "Dog" ~fields:[
-        field "name" ~typ:(non_null string)
-          ~args:Arg.[]
-          ~resolve:(fun _ (dog : dog) -> dog.name);
-        field "puppies" ~typ:(non_null int)
-          ~args:Arg.[]
-          ~resolve:(fun _ (dog : dog) -> dog.puppies);
-      ])
+    obj "Dog"
+      ~fields:
+        [
+          field "name" ~typ:(non_null string)
+            ~args:Arg.[]
+            ~resolve:(fun _ (dog : dog) -> dog.name);
+          field "puppies" ~typ:(non_null int)
+            ~args:Arg.[]
+            ~resolve:(fun _ (dog : dog) -> dog.puppies);
+        ])
 
 let pet : (unit, [ `pet ]) Schema.abstract_typ = Schema.union "Pet"
-
 let cat_as_pet = Schema.add_type pet cat
-
 let dog_as_pet = Schema.add_type pet dog
 
 let named : (unit, [ `named ]) Schema.abstract_typ =
@@ -42,7 +42,6 @@ let named : (unit, [ `named ]) Schema.abstract_typ =
         [ abstract_field "name" ~typ:(non_null string) ~args:Arg.[] ]))
 
 let cat_as_named = Schema.add_type named cat
-
 let dog_as_named = Schema.add_type named dog
 
 let pet_type =
@@ -154,9 +153,8 @@ let suite =
       fun () ->
         let query =
           "fragment NamedFragment on Named { ... on Dog { name } ... on Cat { \
-           name } } fragment PetFragment on Pet { ... NamedFragment ... on \
-           Dog { puppies } ... on Cat { kittens } } { pets { ... PetFragment \
-           } }"
+           name } } fragment PetFragment on Pet { ... NamedFragment ... on Dog \
+           { puppies } ... on Cat { kittens } } { pets { ... PetFragment } }"
         in
         test_query query
           (`Assoc

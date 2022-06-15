@@ -1,4 +1,5 @@
 open Lwt.Infix
+
 module Graphql_cohttp_lwt =
   Graphql_cohttp.Make (Graphql_lwt.Schema) (Cohttp_lwt_unix.IO)
     (Cohttp_lwt.Body)
@@ -39,8 +40,8 @@ let default_response_body =
 
 let test_case ~req ~req_body ~rsp ~rsp_body =
   Lwt_main.run
-    ( Graphql_cohttp_lwt.execute_request schema () req req_body
-    >>= check_response_action ~rsp ~rsp_body )
+    (Graphql_cohttp_lwt.execute_request schema () req req_body
+    >>= check_response_action ~rsp ~rsp_body)
 
 let suite =
   [
@@ -148,8 +149,7 @@ let suite =
                (`Assoc
                  [
                    ( "query",
-                     `String "query A($name: String!) { hello(name: $name) }"
-                   );
+                     `String "query A($name: String!) { hello(name: $name) }" );
                    ("variables", `Assoc [ ("name", `String "world") ]);
                  ]))
         in
@@ -169,8 +169,7 @@ let suite =
                (`Assoc
                  [
                    ( "query",
-                     `String "query A($name: String!) { hello(name: $name) }"
-                   );
+                     `String "query A($name: String!) { hello(name: $name) }" );
                  ]))
         in
         let query =

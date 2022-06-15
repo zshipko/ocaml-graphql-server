@@ -1,12 +1,11 @@
 let yojson =
-  ( module struct
+  (module struct
     type t = Yojson.Basic.json
 
     let pp = Yojson.Basic.pretty_print ?std:None
-
     let equal = ( = )
   end : Alcotest.TESTABLE
-    with type t = Yojson.Basic.json )
+    with type t = Yojson.Basic.json)
   [@@warning "-3"]
 
 let list_of_seq seq =
@@ -33,7 +32,7 @@ let test_query schema ctx ?variables ?operation_name query expected =
               | Seq.Cons (Ok _, _) -> `List (list_of_seq stream)
               | Seq.Cons (Error err, _) -> err
               | Seq.Nil -> `Null
-            with _ -> `String "caught stream exn" )
+            with _ -> `String "caught stream exn")
         | Error err -> err
       in
       Alcotest.check yojson "invalid execution result" expected result

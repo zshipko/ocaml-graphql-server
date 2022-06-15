@@ -14,10 +14,8 @@ let suite =
                   [
                     ( "users",
                       `List
-                        [
-                          `Assoc [ ("id", `Int 1) ];
-                          `Assoc [ ("id", `Int 2) ];
-                        ] );
+                        [ `Assoc [ ("id", `Int 1) ]; `Assoc [ ("id", `Int 2) ] ]
+                    );
                   ] );
             ]) );
     ( "mutation",
@@ -141,8 +139,7 @@ let suite =
                     `Assoc
                       [
                         ( "message",
-                          `String "Field 'foo' is not defined on type 'user'"
-                        );
+                          `String "Field 'foo' is not defined on type 'user'" );
                       ];
                   ] );
             ]) );
@@ -175,9 +172,7 @@ let suite =
                 `List
                   [
                     `Assoc
-                      [
-                        ("message", `String "Fragment cycle detected: F1, F2");
-                      ];
+                      [ ("message", `String "Fragment cycle detected: F1, F2") ];
                   ] );
             ]) );
     ( "fragments combine nested fields",
@@ -214,8 +209,7 @@ let suite =
                             ];
                           `Assoc
                             [
-                              ("role", `String "user");
-                              ("name", `String "Bob");
+                              ("role", `String "user"); ("name", `String "Bob");
                             ];
                           `Assoc
                             [
@@ -328,8 +322,7 @@ let suite =
         | Ok doc -> (
             match Graphql.Schema.execute Test_schema.schema () doc with
             | Ok _ -> ()
-            | Error err -> failwith (Yojson.Basic.pretty_to_string err) ) );
-
+            | Error err -> failwith (Yojson.Basic.pretty_to_string err)) );
     ( "recursive schema",
       `Quick,
       fun () ->
@@ -338,9 +331,15 @@ let suite =
           (`Assoc
             [
               ( "data",
-                  `Assoc [ ("tree", `Assoc [ "children", `List [
-                    `Assoc ["element", `Int 1] ] ]) ]); ]));
-
+                `Assoc
+                  [
+                    ( "tree",
+                      `Assoc
+                        [
+                          ("children", `List [ `Assoc [ ("element", `Int 1) ] ]);
+                        ] );
+                  ] );
+            ]) );
     ( "subscription",
       `Quick,
       fun () ->

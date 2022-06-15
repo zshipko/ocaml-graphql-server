@@ -7,8 +7,7 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
       fun () ->
         let query = "{ string(x: \"foo bar baz\") }" in
         test_query query
-          (`Assoc [ ("data", `Assoc [ ("string", `String "foo bar baz") ]) ])
-    );
+          (`Assoc [ ("data", `Assoc [ ("string", `String "foo bar baz") ]) ]) );
     ( "float argument",
       `Quick,
       fun () ->
@@ -24,8 +23,8 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
       `Quick,
       fun () ->
         let query = "{ bool(x: false) }" in
-        test_query query
-          (`Assoc [ ("data", `Assoc [ ("bool", `Bool false) ]) ]) );
+        test_query query (`Assoc [ ("data", `Assoc [ ("bool", `Bool false) ]) ])
+    );
     ( "enum argument",
       `Quick,
       fun () ->
@@ -50,8 +49,7 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
            \"Doe\"}) }"
         in
         test_query query
-          (`Assoc [ ("data", `Assoc [ ("input_obj", `String "John Doe") ]) ])
-    );
+          (`Assoc [ ("data", `Assoc [ ("input_obj", `String "John Doe") ]) ]) );
     ( "null for optional argument",
       `Quick,
       fun () ->
@@ -107,8 +105,8 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
       fun () ->
         let query = "{ bool_list(x: false) }" in
         test_query query
-          (`Assoc
-            [ ("data", `Assoc [ ("bool_list", `List [ `Bool false ]) ]) ]) );
+          (`Assoc [ ("data", `Assoc [ ("bool_list", `List [ `Bool false ]) ]) ])
+    );
     ( "input coercion: int to float",
       `Quick,
       fun () ->
@@ -140,18 +138,16 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
           try
             let _schema =
               Graphql.Schema.(
-                schema [
-                  field
-                    "field"
-                    ~typ:(non_null int)
-                    ~args:Arg.[arg' "arg" ~typ:int ~default:(`String "1")]
-                    ~resolve:(fun _ () i -> i);
-                  ]
-              ) in
+                schema
+                  [
+                    field "field" ~typ:(non_null int)
+                      ~args:Arg.[ arg' "arg" ~typ:int ~default:(`String "1") ]
+                      ~resolve:(fun _ () i -> i);
+                  ])
+            in
             Error ()
-          with
-            Failure _ ->
-            Ok () in
-          Alcotest.(check (result unit unit)) "did not catch invalid default arg" (Ok ()) res;
-    )
+          with Failure _ -> Ok ()
+        in
+        Alcotest.(check (result unit unit))
+          "did not catch invalid default arg" (Ok ()) res );
   ]

@@ -9,8 +9,7 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
         let variables = [ ("x", `String "foo bar baz") ] in
         let query = "{ string(x: $x) }" in
         test_query variables query
-          (`Assoc [ ("data", `Assoc [ ("string", `String "foo bar baz") ]) ])
-    );
+          (`Assoc [ ("data", `Assoc [ ("string", `String "foo bar baz") ]) ]) );
     ( "float variable",
       `Quick,
       fun () ->
@@ -67,8 +66,7 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
            \"Doe\"}) }"
         in
         test_query variables query
-          (`Assoc [ ("data", `Assoc [ ("input_obj", `String "John Doe") ]) ])
-    );
+          (`Assoc [ ("data", `Assoc [ ("input_obj", `String "John Doe") ]) ]) );
     ( "null for optional variable",
       `Quick,
       fun () ->
@@ -124,16 +122,15 @@ let suite : (string * [> `Quick ] * (unit -> unit)) list =
         let variables = [] in
         let query = "{ string(x: $x) }" in
         test_query variables query
-        (`Assoc ["data", `Assoc ["string", `Null]])
-    );
+          (`Assoc [ ("data", `Assoc [ ("string", `Null) ]) ]) );
     ( "variable coercion: single value to list",
       `Quick,
       fun () ->
         let variables = [ ("x", `Bool false) ] in
         let query = "{ bool_list(x: $x) }" in
         test_query variables query
-          (`Assoc
-            [ ("data", `Assoc [ ("bool_list", `List [ `Bool false ]) ]) ]) );
+          (`Assoc [ ("data", `Assoc [ ("bool_list", `List [ `Bool false ]) ]) ])
+    );
     ( "variable coercion: int to float",
       `Quick,
       fun () ->

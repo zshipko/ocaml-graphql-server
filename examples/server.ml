@@ -2,11 +2,9 @@ open Lwt.Infix
 open Graphql_lwt
 
 type role = User | Admin
-
 type user = { id : int; name : string; role : role; friends : user list }
 
 let rec alice = { id = 1; name = "Alice"; role = Admin; friends = [ bob ] }
-
 and bob = { id = 2; name = "Bob"; role = User; friends = [ alice ] }
 
 let users = [ alice; bob ]
@@ -24,10 +22,7 @@ let user =
   Schema.(
     obj "user" ~fields:(fun user ->
         [
-          field "id"
-            ~args:Arg.[]
-            ~typ:(non_null int)
-            ~resolve:(fun _ p -> p.id);
+          field "id" ~args:Arg.[] ~typ:(non_null int) ~resolve:(fun _ p -> p.id);
           field "name"
             ~args:Arg.[]
             ~typ:(non_null string)
@@ -60,7 +55,7 @@ let set_interval s f destroy =
       Lwt_timeout.create s (fun () ->
           if n > 0 then (
             f ();
-            set_interval_loop s f (n - 1) )
+            set_interval_loop s f (n - 1))
           else destroy ())
     in
     Lwt_timeout.start timeout
@@ -86,7 +81,8 @@ let schema =
                           ~coerce:(fun greeting name -> (greeting, name))
                           ~fields:
                             [
-                              arg' "greeting" ~typ:string ~default:(`String "hello");
+                              arg' "greeting" ~typ:string
+                                ~default:(`String "hello");
                               arg "name" ~typ:(non_null string);
                             ]));
               ]
